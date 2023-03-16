@@ -13,8 +13,8 @@ with Jalasoft
 const { exec } = require('child_process');
 const { stdout, stderr } = require('process');
 
-class ExecuteCommandWindows {
-    executeCommand(command, callback = () => {}){
+class ExecuteCommand {
+    exeCommand(command, callback = () => {}){
         return new Promise((resolve, reject) => {
             exec(command, (error, stdout, stderr) => {
                 if(error){
@@ -26,4 +26,4 @@ class ExecuteCommandWindows {
         });
     }
 }
-module.exports = ExecuteCommandWindows;
+module.exports = ExecuteCommand;

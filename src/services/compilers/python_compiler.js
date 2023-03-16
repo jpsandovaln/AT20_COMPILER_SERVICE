@@ -11,7 +11,7 @@ with Jalasoft
 */
 
 const Compiler = require('../compiler.js');
-const ExecuteCommandWindows = require('../executed/executeComandWindows.js');
+const ExecuteCommand = require('../executed/compiler_executeCommand.js');
 
 class PythonCompiler extends Compiler {
 
@@ -23,9 +23,9 @@ class PythonCompiler extends Compiler {
 
     async interpret(file_path){
         const command = `${this.#interpreter_command} ${file_path}`;
-        const exeCommandWin = new ExecuteCommandWindows();
+        const execute = new ExecuteCommand();
 
-        return await exeCommandWin.executeCommand(command, (stdout, stderr) => {
+        return await execute.exeCommand(command, (stdout, stderr) => {
             return {stdout, stderr};
         });
 

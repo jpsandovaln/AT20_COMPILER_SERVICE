@@ -11,7 +11,7 @@ with Jalasoft
 */
 
 const Compiler = require('../compiler.js');
-const ExecuteCommandWindows = require('../executed/executeComandWindows.js');
+const ExecuteCommand = require('../executed/compiler_executeCommand.js');
 
 class CSharpCompiler extends Compiler {
 
@@ -25,18 +25,18 @@ class CSharpCompiler extends Compiler {
     async compile(file_path) {
         const out_file_path = './src/services/compilers/compiled_files/prueba.exe';
         const command_to_compile = `${this.#compiler_command} -out:${out_file_path} ${file_path}`
-        const exeCommandWin = new ExecuteCommandWindows();
+        const execute = new ExecuteCommand();
 
-        await exeCommandWin.executeCommand(command_to_compile);
+        await execute.exeCommand(command_to_compile);
 
         return out_file_path;
     }
 
     async executeAndRead(file_path) {
         const command_to_run = `${this.#execute_and_read_command} ${file_path}`;
-        const exeCommandWin = new ExecuteCommandWindows();
+        const execute = new ExecuteCommand();
 
-        return await exeCommandWin.executeCommand(command_to_run, (stdout, stderr) => {
+        return await execute.exeCommand(command_to_run, (stdout, stderr) => {
             return {stdout, stderr};
         });
     }
