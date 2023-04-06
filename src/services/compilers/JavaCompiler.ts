@@ -22,18 +22,6 @@ class JavaCompiler extends Compiler {
   public async run(file_path: string): Promise<{ stdout: string; stderr: string }> {
     return await this.compileAndRead(file_path);
   }
-
-  public executeCommand(command: string, callback = (stdout: string, stderr: string) => stdout): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      exec(command, (error, stdout, stderr) => {
-        if (error) {
-          reject(error);
-          return;
-        }
-        resolve(callback(stdout, stderr));
-      });
-    });
-  }
 }
 
 export default JavaCompiler;

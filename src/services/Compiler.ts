@@ -4,14 +4,14 @@ class Compiler {
     
   constructor(...args: any[]) {}
 
-  executeCommand(command: string): Promise<string> {
+  executeCommand(command: string, callback = (stdout: string, stderr: string) => stdout): Promise<string> {
     return new Promise((resolve, reject) => {
       exec(command, (error: ExecException | null, stdout: string, stderr: string) => {
         if (error) {
           reject(error);
           return;
         }
-        resolve(stdout);
+        resolve(callback(stdout, stderr));
       });
     });
   }

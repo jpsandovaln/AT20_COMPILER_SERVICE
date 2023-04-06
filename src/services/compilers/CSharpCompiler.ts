@@ -34,18 +34,6 @@ class CSharpCompiler extends Compiler {
     
         return await this.executeAndRead(new_file_path);
     }
-    
-    executeCommand(command: string): Promise<string> {
-        return new Promise<string>((resolve, reject) => {
-          exec(command, (error: ExecException | null, stdout: string, stderr: string) => {
-            if (error) {
-              reject(error);
-              return;
-            }
-            resolve(stdout);
-          });
-        });
-    }
 }
 
 export default CSharpCompiler;
