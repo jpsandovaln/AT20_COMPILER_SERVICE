@@ -1,4 +1,3 @@
-import { exec, ExecException } from 'child_process';
 import Compiler from '../Compiler';
 
 class CSharpCompiler extends Compiler {
@@ -9,30 +8,33 @@ class CSharpCompiler extends Compiler {
         super('c_sharp','.cs');
     }
     
-    async compile(file_path: string): Promise<string> {
+    compile(file_path: string): string {
         const out_file_path = './src/services/compilers/compiled_files/prueba.exe';
-        const command_to_compile = `${this.#compiler_command} -out:${out_file_path} ${file_path}`
+        const command_to_compile = `${this.#compiler_command} -out:${out_file_path} ${file_path}`;
     
-        await this.executeCommand(command_to_compile);
+        this.executeCommand(command_to_compile);
     
         return out_file_path;
     }
     
-    async executeAndRead(file_path: string): Promise<{stdout: string, stderr: string}> {
+    executeAndRead(file_path: string): {stdout: string, stderr: string} {
         const command_to_run = `${this.#execute_and_read_command} ${file_path}`;
     
-        return await this.executeCommand(command_to_run).then((result: string) => {
+        try {
+            const result = this.executeCommand(command_to_run);
             return { stdout: result, stderr: '' };
-        }).catch((error: ExecException) => {
-            return { stdout: '', stderr: error.message };
-        });
-        
+        } catch (error) {
+            if (error instanceof Error) {
+                return { stdout: '', stderr: error.message };
+            } else {
+                return { stdout: '', stderr: 'An unknown error occurred.' };
+            }
+        }
     }
     
-     async run(file_path: string): Promise<{stdout: string, stderr: string}> {
-        const new_file_path = await this.compile(file_path);
-    
-        return await this.executeAndRead(new_file_path);
+    run(file_path: string): {stdout: string, stderr: string} {
+        const new_file_path = this.compile(file_path);
+        return this.executeAndRead(new_file_path);
     }
 }
 

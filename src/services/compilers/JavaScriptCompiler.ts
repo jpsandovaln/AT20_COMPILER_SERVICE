@@ -10,7 +10,7 @@ accordance with the terms of the license agreement you entered into
 with Jalasoft
 */
 import Compiler from '../Compiler';
-import { exec } from 'child_process';
+import { execSync } from 'child_process';
 
 class JavaCompiler extends Compiler {
   #compile_and_execute_command = 'java';
@@ -19,19 +19,24 @@ class JavaCompiler extends Compiler {
     super('java', '.java');
   }
 
-  public async compileAndRead(file_path: string): Promise<{ stdout: string; stderr: string }> {
+  public compileAndRead(file_path: string): { stdout: string; stderr: string } {
     const command = `${this.#compile_and_execute_command} ${file_path}`;
 
-    const result = await this.executeCommand(command, (stdout, stderr) => {
-      // Do something with stdout and stderr here
-      return stdout;
-    });
-
-    return { stdout: result, stderr: '' };
+    try {
+      const result = execSync(command, { encoding: 'utf8' });
+      return { stdout: result, stderr: '' };
+    } catch (error) {
+      if (error instanceof Error && 'stderr' in error) {
+        const stderr = typeof error.stderr === 'string' ? error.stderr : 'An unknown error occurred.';
+        return { stdout: '', stderr };
+      } else {
+        return { stdout: '', stderr: 'An unknown error occurred.' };
+      }
+    }
   }
 
-  public async run(file_path: string): Promise<{ stdout: string; stderr: string }> {
-    return await this.compileAndRead(file_path);
+  public run(file_path: string): { stdout: string; stderr: string } {
+    return this.compileAndRead(file_path);
   }
 }
 

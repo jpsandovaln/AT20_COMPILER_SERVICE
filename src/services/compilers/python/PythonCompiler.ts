@@ -4,26 +4,32 @@
 // class PythonCompiler extends Compiler {
 //     #interpreter_command!: string; // Propiedad privada sin valor inicial
 
-
 //     constructor() {
 //         super('python', '.py');
 //     }
 
-//     async interpret(file_path: string, version: string): Promise<{ stdout: string; stderr: string }> {
+//     interpret(file_path: string, version: string): { stdout: string; stderr: string } {
 //         this.#interpreter_command = VERSIONES[version];
 //         if (!this.#interpreter_command) {
 //             throw new Error('Version not found');
 //         }
 //         const command = `${this.#interpreter_command} ${file_path}`;
 
-//         const result = await this.executeCommand(command);
-//         return { stdout: result, stderr: '' };
+//         try {
+//             const result = this.executeCommand(command);
+//             return { stdout: result, stderr: '' };
+//         } catch (error) {
+//             if (error instanceof Error) {
+//                 return { stdout: '', stderr: error.message };
+//             } else {
+//                 return { stdout: '', stderr: 'An unknown error occurred.' };
+//             }
+//         }
 //     }
 
-//     async run(file_path: string, version: string): Promise<{ stdout: string; stderr: string }> {
-//         return await this.interpret(file_path, version);
+//     run(file_path: string, version: string): { stdout: string; stderr: string } {
+//         return this.interpret(file_path, version);
 //     }
 // }
 
 // export default PythonCompiler;
-
