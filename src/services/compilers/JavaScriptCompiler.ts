@@ -10,36 +10,34 @@ accordance with the terms of the license agreement you entered into
 with Jalasoft
 */
 import Compiler from '../Compiler';
-import { exec } from 'child_process';
+import { execSync } from 'child_process';
 
-class JavaScriptCompiler extends Compiler {
-  private readonly compileAndExecuteCommand = 'node';
+class JavaCompiler extends Compiler {
+  #compile_and_execute_command = 'java';
 
   constructor() {
-    super('node', '.js');
+    super('java', '.java');
   }
 
-  public async compileAndRead(file_path: string): Promise<{ stdout: string; stderr: string }> {
-    const command = `${this.compileAndExecuteCommand} ${file_path}`;
-    const result = await this.executeCommand(command);
-    return { stdout: result, stderr: '' };
+  public compileAndRead(file_path: string): { stdout: string; stderr: string } {
+    const command = `${this.#compile_and_execute_command} ${file_path}`;
+
+    try {
+      const result = execSync(command, { encoding: 'utf8' });
+      return { stdout: result, stderr: '' };
+    } catch (error) {
+      if (error instanceof Error && 'stderr' in error) {
+        const stderr = typeof error.stderr === 'string' ? error.stderr : 'An unknown error occurred.';
+        return { stdout: '', stderr };
+      } else {
+        return { stdout: '', stderr: 'An unknown error occurred.' };
+      }
+    }
   }
 
-  public async run(file_path: string): Promise<{ stdout: string; stderr: string }> {
-    return await this.compileAndRead(file_path);
-  }
-
-  public executeCommand(command: string, callback = (stdout: string, stderr: string) => stdout): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      exec(command, (error, stdout, stderr) => {
-        if (error) {
-          reject(error);
-          return;
-        }
-        resolve(callback(stdout, stderr));
-      });
-    });
+  public run(file_path: string): { stdout: string; stderr: string } {
+    return this.compileAndRead(file_path);
   }
 }
 
-export default JavaScriptCompiler;
+export default JavaCompiler;
