@@ -4,10 +4,11 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm install --only=production
 
-COPY . .
+COPY .env .
+COPY ./build ./build
 
-EXPOSE 9292
+EXPOSE ${PORT}
 
 CMD ["npm", "start"]
