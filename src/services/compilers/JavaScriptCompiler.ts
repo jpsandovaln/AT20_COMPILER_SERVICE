@@ -13,14 +13,14 @@ import Compiler from '../Compiler';
 import { execSync } from 'child_process';
 
 class JavaCompiler extends Compiler {
-  #compile_and_execute_command = 'java';
+  #compile_and_execute_command = 'node';
 
   constructor() {
-    super('java', '.java');
+    super('javascript', '.js');
   }
 
   public compileAndRead(file_path: string): { stdout: string; stderr: string } {
-    const command = `${this.#compile_and_execute_command} ${file_path}`;
+    const command = `${process.env.COMPILE_AND_EXECUTE_COMMAND_JS} ${file_path}`;
 
     try {
       const result = execSync(command, { encoding: 'utf8' });

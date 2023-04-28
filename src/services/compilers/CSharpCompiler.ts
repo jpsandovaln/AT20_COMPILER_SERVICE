@@ -11,9 +11,7 @@ class CSharpCompiler extends Compiler {
     compile(file_path: string): string {
         const out_file_path = './src/services/compilers/compiled_files/prueba.exe';
         const command_to_compile = `${this.#compiler_command} -out:${out_file_path} ${file_path}`;
-    
         this.executeCommand(command_to_compile);
-    
         return out_file_path;
     }
     
@@ -31,7 +29,6 @@ class CSharpCompiler extends Compiler {
             }
         }
     }
-    
     run(file_path: string): {stdout: string, stderr: string} {
         const new_file_path = this.compile(file_path);
         return this.executeAndRead(new_file_path);

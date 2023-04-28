@@ -5,6 +5,6 @@ import compiler_middleware from '../middlewares/compiler_middleware';
 const router = express.Router();
 const compiler = new CompilerController();
 
-router.get('/', compiler_middleware, compiler.get);
+router.post('/', compiler_middleware, compiler.get);
 
 export default router;
