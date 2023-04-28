@@ -4,7 +4,7 @@
   "description": "sholud be able to run a code and return the result",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "npx ts-node index.ts",
     "dev": "ts-node-dev index.ts",
     "test": "jest"
   },
@@ -25,7 +25,7 @@
     "nodemon": "^2.0.21",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.0.3"
+    "typescript": "^5.0.4"
   },
   "compilerOptions": {
     "esModuleInterop": true,
