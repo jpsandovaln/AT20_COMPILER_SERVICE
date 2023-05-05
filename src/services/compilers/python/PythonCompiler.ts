@@ -1,3 +1,4 @@
+import CompilerException from '../../../common/compilerException';
 import Compiler from '../../Compiler';
 //import VERSIONES from './python_versionMap';
 
@@ -8,12 +9,13 @@ class PythonCompiler extends Compiler {
         super('python', '.py');
     }
 
-    interpret(file_path: string, version: string): { stdout: string; stderr: string } {
+    interpret(file_path: string, version?: string): { stdout: string; stderr: string } {
         // this.#interpreter_command = VERSIONES[version];
         // if (!this.#interpreter_command) {
         //     throw new Error('Version not found');
         // }
-        const command = `${process.env.COMPILE_AND_EXECUTE_COMMAND_PYTHON} ${file_path}`;
+        // const command = `${process.env.COMPILE_AND_EXECUTE_COMMAND_PYTHON} ${file_path}`;
+        const command = `${this.#interpreter_command} ${file_path}`;
 
         try {
             const result = this.executeCommand(command);
@@ -27,7 +29,10 @@ class PythonCompiler extends Compiler {
         }
     }
 
-    run(file_path: string, version: string): { stdout: string; stderr: string } {
+    run(file_path: string, version?: string): { stdout: string; stderr: string } {
+        if (!file_path || file_path.trim().length === 0) {
+            throw new CompilerException('Invalid file path', 403, 'AT20-PythonCompiler.run()');
+        }
         return this.interpret(file_path, version);
     }
 }

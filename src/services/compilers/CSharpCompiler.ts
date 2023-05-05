@@ -1,3 +1,4 @@
+import CompilerException from '../../common/compilerException';
 import Compiler from '../Compiler';
 
 class CSharpCompiler extends Compiler {
@@ -30,6 +31,9 @@ class CSharpCompiler extends Compiler {
         }
     }
     run(file_path: string): {stdout: string, stderr: string} {
+        if (!file_path || file_path.trim().length === 0) {
+            throw new CompilerException('Invalid file path', 403, 'AT20-CSCompiler.run()');
+        }
         const new_file_path = this.compile(file_path);
         return this.executeAndRead(new_file_path);
     }
