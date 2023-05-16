@@ -1,3 +1,4 @@
+import CompilerException from '../../common/compilerException';
 import Compiler from '../Compiler';
 
 class JavaCompiler extends Compiler {
@@ -19,6 +20,12 @@ class JavaCompiler extends Compiler {
   }
 
   public run(file_path: string): { stdout: string; stderr: string } {
+    if (!file_path || file_path.trim().length === 0) {
+      throw new CompilerException('Invalid file path', 404, 'AT20-JavaCompiler.run()');
+    }
+    // if (file_path.trim().length === 0) {
+    //   throw new CompilerException('Invalid file path (Does not allow space blank inputs)', 404, 'AT20-JavaCompiler.run()');
+    // }
     return this.compileAndRead(file_path);
   }
 }

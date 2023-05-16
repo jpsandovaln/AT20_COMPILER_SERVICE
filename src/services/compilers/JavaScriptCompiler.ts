@@ -9,6 +9,7 @@ disclose such Confidential Information and shall use it only in
 accordance with the terms of the license agreement you entered into
 with Jalasoft
 */
+import CompilerException from '../../common/compilerException';
 import Compiler from '../Compiler';
 import { execSync } from 'child_process';
 
@@ -20,7 +21,8 @@ class JavaCompiler extends Compiler {
   }
 
   public compileAndRead(file_path: string): { stdout: string; stderr: string } {
-    const command = `${process.env.COMPILE_AND_EXECUTE_COMMAND_JS} ${file_path}`;
+    // const command = `${process.env.COMPILE_AND_EXECUTE_COMMAND_JS} ${file_path}`;
+    const command = `${this.#compile_and_execute_command} ${file_path}`;
 
     try {
       const result = execSync(command, { encoding: 'utf8' });
@@ -36,6 +38,9 @@ class JavaCompiler extends Compiler {
   }
 
   public run(file_path: string): { stdout: string; stderr: string } {
+    if (!file_path || file_path.trim().length === 0) {
+      throw new CompilerException('Invalid file path', 403, 'AT20-JSCompiler.run()');
+    }
     return this.compileAndRead(file_path);
   }
 }
